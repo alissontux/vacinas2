@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 @RestControllerAdvice
 public class ErroDeValidacaoHandler {
-
+	
 	@Autowired
 	private MessageSource messageSource;
 
@@ -35,6 +35,8 @@ public class ErroDeValidacaoHandler {
 			ErroFormularioDto erro = new ErroFormularioDto(e.getField(), mensagem);
 			dto.add(erro);
 		});
+		
+		System.out.println("Teste");
 
 		return dto;
 
