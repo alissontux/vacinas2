@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +43,7 @@ public class AplicacaoController {
 
 	// @RequestMapping(value = "/topicos", method = RequestMethod.GET)
 	@GetMapping
+	@Cacheable(value = "listaAplicacaoVacina")
 	public List<AplicacaoDto> listaAplicacaoVacina() {
 
 		List<Aplicacao> listAplicacaoVacina = aplicacaoRepository.findAll();
@@ -50,6 +53,7 @@ public class AplicacaoController {
 	}
 
 	@GetMapping("/{cpf}")
+	@Cacheable(value = "listaAplicacaoVacinaByCpf")
 	public List<AplicacaoDto> listaAplicacaoVacinaByCpf(@PathVariable("cpf") String cpf) {
 
 		List<Aplicacao> listAplicacaoVacina = aplicacaoRepository.findByCidadao_Cpf(cpf);
@@ -60,6 +64,7 @@ public class AplicacaoController {
 
 	@PostMapping
 	@Transactional
+	@CacheEvict(value = "listaAplicacaoVacina, listaAplicacaoVacinaByCpf", allEntries = true)
 	public ResponseEntity<?> cadastro(@RequestBody @Valid AplicacaoForm form, UriComponentsBuilder uriBuilder) {
 		try {
 			Optional<Cidadao> optionalCpf = cidadaoRepository.findByCpf(form.getCpf());

@@ -7,16 +7,14 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -33,6 +31,7 @@ public class CidadaoController {
 	private CidadaoRepository cidadaoRepository;
 
 	@GetMapping("/{id}")
+	@Cacheable(value = "buscaCidadaoById")
 	public ResponseEntity<CidadaoDto> buscaById(@PathVariable("id") Long id) {
 
 		Optional<Cidadao> cidadao = cidadaoRepository.findById(id);
@@ -60,6 +59,7 @@ public class CidadaoController {
 
 	@PostMapping
 	@Transactional
+	@CacheEvict(value = "buscaCidadaoById", allEntries = true) //informa ao Spring para apagar o Cache
 	public ResponseEntity<?> cadastro(@RequestBody @Valid CidadaoForm form, UriComponentsBuilder uriBuilder) {
 
 		try {
