@@ -1,6 +1,7 @@
 package br.com.alissonPrado.vacinas.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -22,6 +23,7 @@ public class VacinaColtroller {
 	private VacinaRepository vacinaRepository;
 
 	@GetMapping
+	@Cacheable(value = "listaVacinas")
 	public Page<VacinaDto> listaVacinas(@RequestParam(required = false) String nome,
 			@PageableDefault(sort = "nome", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
 
