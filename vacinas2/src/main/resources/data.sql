@@ -1,3 +1,6 @@
+INSERT INTO USUARIO(nome, email, senha) VALUES('Aluno', 'aluno@email.com', 
+'$2a$10$zu8DleonqmDzK4voVUkzO.eO56fCn5gIqKnJHY822ZB5Jy34Q3REW');
+
 INSERT INTO vacina (nome) VALUES ('CoronaVac');
 INSERT INTO vacina (nome) VALUES ('Oxford/AstraZeneca');
 INSERT INTO vacina (nome) VALUES ('Pfizer/BioTech');
