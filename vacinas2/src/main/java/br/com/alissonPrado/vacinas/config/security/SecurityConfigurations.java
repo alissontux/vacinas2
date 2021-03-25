@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
@@ -22,14 +23,34 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
 		auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
 	}
-
+	
+	//Configurações de autorização via token
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/vacinas").permitAll().antMatchers(HttpMethod.GET, "/")
-				.permitAll().antMatchers(HttpMethod.GET, "/cidadao/*").permitAll()
-				.antMatchers(HttpMethod.GET, "/aplicacao").permitAll().antMatchers(HttpMethod.GET, "/aplicacao/*")
-				.permitAll().anyRequest().authenticated().and().formLogin();
+		http.authorizeRequests()
+		.antMatchers(HttpMethod.GET, "/").permitAll()
+		.antMatchers(HttpMethod.GET, "/vacinas").permitAll()		
+		.antMatchers(HttpMethod.GET, "/cidadao/*").permitAll()
+		.antMatchers(HttpMethod.GET, "/aplicacao").permitAll()
+		.antMatchers(HttpMethod.GET, "/aplicacao/*").permitAll()
+		.antMatchers(HttpMethod.POST, "/auth").permitAll()
+		.anyRequest().authenticated()
+		.and().csrf().disable()
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
+
+	//Configurações de autenticação via login e senha (sessão)
+//	@Override
+//	protected void configure(HttpSecurity http) throws Exception {
+//		http.authorizeRequests()
+//		.antMatchers(HttpMethod.GET, "/").permitAll()
+//		.antMatchers(HttpMethod.GET, "/vacinas").permitAll()		
+//		.antMatchers(HttpMethod.GET, "/cidadao/*").permitAll()
+//		.antMatchers(HttpMethod.GET, "/aplicacao").permitAll()
+//		.antMatchers(HttpMethod.GET, "/aplicacao/*").permitAll()
+//		.anyRequest().authenticated().and().formLogin();
+//	}
+
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
