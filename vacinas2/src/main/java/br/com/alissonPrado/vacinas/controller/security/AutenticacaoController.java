@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.alissonPrado.vacinas.config.security.TokenService;
+import br.com.alissonPrado.vacinas.controller.dto.security.TokenDto;
 import br.com.alissonPrado.vacinas.controller.form.security.LoginForm;
 
 @RestController
@@ -26,7 +27,7 @@ public class AutenticacaoController {
 	TokenService tokenService;
 
 	@PostMapping
-	public ResponseEntity<?> autenticar(@RequestBody @Valid LoginForm form) {
+	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form) {
 
 		UsernamePasswordAuthenticationToken dadosLogin = form.converter();
 
@@ -36,9 +37,8 @@ public class AutenticacaoController {
 
 			String token = tokenService.gerarToken(authentication);
 
-			System.out.println("Token gerado: " + token);
-
-			return ResponseEntity.ok().build();
+			//Bearer é um dos mecanismos de autenticação utilizados no protocolo HTTP, tal como o Basic e o Digest.
+			return ResponseEntity.ok(new TokenDto(token, "Bearer"));
 
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().build();
