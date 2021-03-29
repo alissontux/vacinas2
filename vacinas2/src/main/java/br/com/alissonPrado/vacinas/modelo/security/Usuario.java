@@ -23,13 +23,13 @@ public class Usuario implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	String nome;
-	String email;
-	String senha;
+	private String nome;
+	private String email;
+	private String senha;
 
 	// por padrão é LAZY / alterado para EAGER para já trazer os perfis de acesso
 	@ManyToMany(fetch = FetchType.EAGER)
-	List<Perfil> perfis = new ArrayList<>();
+	private List<Perfil> perfis = new ArrayList<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
