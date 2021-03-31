@@ -26,8 +26,8 @@ public class AplicacaoForm {
 	private Integer dose;
 
 	@NotNull
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime dataAplicacao;
 
 	public Long getIdVacina() {

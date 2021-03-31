@@ -22,10 +22,10 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AutenticacaoService autenticacaoService;
-	
+
 	@Autowired
 	private TokenService tokenService;
-	
+
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
@@ -34,32 +34,29 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
 		auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
 	}
-	
-	//classe implementada para poder injetar objeto AuthenticationManager em AutenticacaoController
+
+	// classe implementada para poder injetar objeto AuthenticationManager em
+	// AutenticacaoController
 	@Override
 	@Bean
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
-	
-	//Configurações de autorização via token
+
+	// Configurações de autorização via token
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-		.antMatchers(HttpMethod.GET, "/").permitAll()
-		.antMatchers(HttpMethod.GET, "/vacinas").permitAll()		
-		.antMatchers(HttpMethod.GET, "/cidadao/*").permitAll()
-		.antMatchers(HttpMethod.GET, "/aplicacao").permitAll()
-		.antMatchers(HttpMethod.GET, "/aplicacao/*").permitAll()
-		.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-		.antMatchers(HttpMethod.POST, "/auth").permitAll()
-		.anyRequest().authenticated()
-		.and().csrf().disable()
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/").permitAll().antMatchers(HttpMethod.GET, "/vacinas")
+				.permitAll().antMatchers(HttpMethod.GET, "/cidadao/*").permitAll()
+				.antMatchers(HttpMethod.GET, "/aplicacao").permitAll().antMatchers(HttpMethod.GET, "/aplicacao/*")
+				.permitAll().antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+				.antMatchers(HttpMethod.POST, "/auth").permitAll().anyRequest().authenticated().and().csrf().disable()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				.addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository),
+						UsernamePasswordAuthenticationFilter.class);
 	}
 
-	//Configurações de autenticação via login e senha (sessão)
+	// Configurações de autenticação via login e senha (sessão)
 //	@Override
 //	protected void configure(HttpSecurity http) throws Exception {
 //		http.authorizeRequests()
@@ -71,13 +68,14 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 //		.anyRequest().authenticated().and().formLogin();
 //	}
 
-
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		// TODO Auto-generated method stub
-		super.configure(web);
+		// Swagger
+		web.ignoring().antMatchers("/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**",
+				"/swagger-resources/**");
+
 	}
-	
+
 //	public static void main(String[] args) {
 //	System.out.println(new BCryptPasswordEncoder().encode("123456"));
 //}
