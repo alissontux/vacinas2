@@ -46,13 +46,20 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	// Configurações de autorização via token
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/").permitAll().antMatchers(HttpMethod.GET, "/vacinas")
-				.permitAll().antMatchers(HttpMethod.GET, "/cidadao/*").permitAll()
-				.antMatchers(HttpMethod.GET, "/aplicacao").permitAll().antMatchers(HttpMethod.GET, "/aplicacao/*")
-				.permitAll().antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-				.antMatchers(HttpMethod.POST, "/auth").permitAll().anyRequest().authenticated().and().csrf().disable()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository),
+		http.authorizeRequests()
+		.antMatchers(HttpMethod.GET, "/").permitAll()
+		.antMatchers(HttpMethod.GET, "/vacinas").permitAll()
+		.antMatchers(HttpMethod.GET, "/cidadao/*").permitAll()
+		.antMatchers(HttpMethod.POST, "/cidadao").hasRole("ADMIN")
+		.antMatchers(HttpMethod.GET, "/aplicacao").permitAll()
+		.antMatchers(HttpMethod.POST, "/aplicacao").hasRole("APLICADOR")
+		.antMatchers(HttpMethod.GET, "/aplicacao/*").permitAll()
+		.antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+		.antMatchers(HttpMethod.POST, "/auth").permitAll()
+		.anyRequest().authenticated()
+		.and().csrf().disable()
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository),
 						UsernamePasswordAuthenticationFilter.class);
 	}
 
