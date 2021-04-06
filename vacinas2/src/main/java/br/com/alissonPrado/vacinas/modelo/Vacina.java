@@ -12,8 +12,8 @@ public class Vacina {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(nullable = false)	
+
+	@Column(nullable = false)
 	private String nome;
 
 	public Vacina() {
@@ -33,7 +33,9 @@ public class Vacina {
 	public String getNome() {
 		return nome;
 	}
-	
-	
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
 }
