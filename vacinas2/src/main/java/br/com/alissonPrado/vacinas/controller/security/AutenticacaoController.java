@@ -19,7 +19,7 @@ import br.com.alissonPrado.vacinas.controller.form.security.LoginForm;
 
 @RestController
 @RequestMapping("/auth")
-@Profile("prod")
+@Profile(value = {"prod", "test"})
 public class AutenticacaoController {
 
 	@Autowired

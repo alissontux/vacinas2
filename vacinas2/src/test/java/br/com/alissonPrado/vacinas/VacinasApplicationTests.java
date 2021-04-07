@@ -1,17 +1,19 @@
 package br.com.alissonPrado.vacinas;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 
 @SpringBootTest
-class VacinasApplicationTests {
+@ActiveProfiles("test")
+public class VacinasApplicationTests {
 
 	@Test
-	void contextLoads() {
-		assertTrue(true);
+	public void contextLoads() {
+		
+		Assert.assertTrue(true);
 		
 	}
 
